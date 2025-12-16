@@ -1,9 +1,9 @@
 /**
  * Herkese açık routelar
  * Bunlar login gerektirmez
- * @type {string[]}
+ * @type {string}
  */
-export const publicRoutes = "/dashboard";
+export const publicRoutes = "/(customer)";
  
   
 

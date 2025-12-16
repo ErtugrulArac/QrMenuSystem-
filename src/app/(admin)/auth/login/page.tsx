@@ -36,7 +36,7 @@ const LoginForm = () => {
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
-            email: email,
+            email: "admin@qrmenu.com",
             password: '',
         },
     })
@@ -48,9 +48,14 @@ const LoginForm = () => {
         startTransition(() => {
             login(values)
             .then((data) => {
-                setError(data?.error);
-                // setSuccess(data?.success);
-                //for 2fa
+                if (data?.error) {
+                    setError(data.error);
+                } else {
+                    setSuccess("Giriş başarılı!");
+                }
+            })
+            .catch((error) => {
+                setError("Bir hata oluştu");
             })
         });
     }
@@ -78,10 +83,9 @@ const LoginForm = () => {
                                         <Input
                                             {...field}
                                             disabled={isPending}
-                                            placeholder='ahmet.teke@example.com'
+                                            placeholder='admin@qrmenu.com'
                                             type='email'
                                             autoComplete='email'
-                                            value={email ? email : undefined}
                                         />
                                     </FormControl>
                                     <FormMessage />
