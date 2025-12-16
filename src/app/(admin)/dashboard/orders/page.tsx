@@ -179,12 +179,12 @@ export default function OrdersManagement() {
       // Ürünü iptal edildi olarak işaretle
       const updatedItems = order.items.map(item => 
         item.id === itemId 
-          ? { ...item, cancelled: true }
+          ? { ...item, cancelled: true } as OrderItem
           : item
       );
       
       // İptal edilmemiş ürünleri say
-      const activeItems = updatedItems.filter(item => !item.cancelled);
+      const activeItems = updatedItems.filter((item): item is OrderItem => !item.cancelled);
       
       // Eğer hiç aktif ürün kalmadıysa siparişi tamamen sil
       if (activeItems.length === 0) {
