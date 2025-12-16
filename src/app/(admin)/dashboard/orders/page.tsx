@@ -11,6 +11,7 @@ interface OrderItem {
   quantity: number;
   price: number;
   subtotal: number;
+  cancelled?: boolean;
 }
 
 interface Order {
