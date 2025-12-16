@@ -23,7 +23,7 @@ const Index =  () => {
 
   const [prop, setProp] = useState("");
   const [imageName, setImageName] = useState("");
-  const [desc, setDesc] = useState("");
+  const [desc, setDesc] = useState<string | null>("");
   const [price, setPrice] = useState(0);
   const [id, setId] = useState("");
 
