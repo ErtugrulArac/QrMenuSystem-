@@ -26,7 +26,7 @@ const index = ({ products }: { products: oneProductType }) => {
     const closeButtonRef = useRef<HTMLButtonElement>(null)
     
     const description = lang === 'TR' ? products.description : products.edescription;
-    const shortDescription = description.length > 110 ? description.slice(0, 110) + '...' : description;
+    const shortDescription = description ? (description.length > 110 ? description.slice(0, 110) + '...' : description) : '';
     const productName = lang === 'TR' ? products.name : products.ename;
 
     const handleAddToCart = () => {
