@@ -21,19 +21,19 @@ export type productType = {
 }[];
 
 export type oneCategoryType = {
-    id: number & string;
+    id: string;
     name: string;
     ename: string;
     image: string;
 }
 
 export type oneProductType = {
-    id: number & string;
+    id: string;
     image: string;
     name: string;
     ename: string;
     description: string | null;
     edescription: string | null;
     price: number;
-    categoryId?: string;
+    categoryId: string;
 };
