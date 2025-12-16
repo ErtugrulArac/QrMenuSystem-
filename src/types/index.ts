@@ -32,7 +32,8 @@ export type oneProductType = {
     image: string;
     name: string;
     ename: string;
-    description: string;
-    edescription: string;
+    description: string | null;
+    edescription: string | null;
     price: number;
+    categoryId?: string;
 };
