@@ -14,6 +14,7 @@ interface Campaign {
   active: boolean
   duration?: number | null
   durationUnit?: 'minutes' | 'hours' | 'days'
+  createdAt?: string
   type?: 'campaign'
 }
 
