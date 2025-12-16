@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'next/navigation';
-import { useTransition, useState } from 'react';
+import { useTransition, useState, Suspense } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
@@ -23,7 +23,7 @@ import { FormError } from '@/components/auth/formError';
 import { FormSuccess } from '@/components/auth/formSucces';
 import { login } from '@/actions/login';
 
-const page = () => {
+const LoginForm = () => {
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl");
     const urlError = searchParams.get("error") === "OAtuhAccountNotLinked" ? "Bu mail adresiyle girili başka bir hesap var." : "";
@@ -122,6 +122,14 @@ const page = () => {
             </Form>
             <p className='underline text-sm opacity-90 text-center'>Hesap bilgilerinizi bilmiyorsanız iletişime geçin <span className='text-red-600 '>arlanmedya@gmail.com</span></p>
         </div>
+    )
+}
+
+const page = () => {
+    return (
+        <Suspense fallback={<div className='bg-white text-black rounded-lg gap-7 flex flex-col py-6 px-20 max-md:px-2 max-md:py-3 max-md:mt-3 max-md:mb-3'>Yükleniyor...</div>}>
+            <LoginForm />
+        </Suspense>
     )
 }
 
