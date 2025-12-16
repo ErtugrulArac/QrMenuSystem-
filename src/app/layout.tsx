@@ -21,12 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <div className="md:w-[50%] lg:w-[30%] m-auto max-md:w-[90%] font-sans flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
+      <body className="w-full">
+        {children}
         <ToastContainer position="bottom-right" theme="dark" autoClose={3000}/>
         <SpeedInsights />
         <Analytics />

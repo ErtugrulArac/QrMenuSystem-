@@ -37,3 +37,40 @@ model User {
   image         String?
   password      String?
 }
+
+model Table {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  code        String  @unique
+  status      String  @default("closed") // "open" or "closed"
+  currentOrder String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  tableCode   String
+  items       Json     // Array of items with structure: {id, name, quantity, price, subtotal, cancelled?}
+  subtotal    Float
+  tax         Float
+  total       Float
+  status      String   @default("pending") // "pending", "confirmed", "paid", "rejected"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  paidAt      DateTime?
+  
+  @@index([tableCode])
+  @@index([status])
+}
+
+model WaiterCall {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  tableCode   String
+  message     String?
+  status      String   @default("pending") // "pending", "resolved"
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+  
+  @@index([tableCode])
+  @@index([status])
+}

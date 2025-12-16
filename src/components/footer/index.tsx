@@ -1,12 +1,9 @@
-import React from 'react'
-
-const index = () => {
+export default function Footer() {
   return (
-    <div className='flex flex-col items-center gap-2'>
-      <h2 className='mt-4 font-semibold font-osw text-center'>AFİYET <span className='text-red-700'>OLSUN</span> :)</h2>
-      <h4 className='flex gap-3 items-center font-osw '><img className='size-4' src="https://i.hizliresim.com/h2tzn2v.png" alt="arlanmedya" /><a className="underline" href="https://www.arlanqrmenu.com/">Arlan Medya</a> @2024</h4>
-    </div>
-  )
+    <footer className='w-full bg-white border-t border-gray-100 mt-3 py-3'>
+      <div className='max-w-7xl mx-auto px-4 md:px-8'>
+        <p className='text-center text-gray-600 font-medium text-sm'>AFİYET OLSUN 🍽️</p>
+      </div>
+    </footer>
+  );
 }
-
-export default index

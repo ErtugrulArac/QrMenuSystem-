@@ -1,6 +1,8 @@
 import MenuItems from '@/components/MenuItems'
 import { fetchProduct } from "@/actions/getData"
 import Button from "@/components/button";
+import CampaignBanner from '@/components/CampaignBanner'
+import ProductsRenderer from './ProductsRenderer'
 
 
 type Props = {
@@ -15,8 +17,9 @@ const Home = async ({ params }: Props) => {
   return (
     <div>
       <MenuItems />
+      <CampaignBanner />
       <div className='mt-10 '>
-            {products}
+            <ProductsRenderer products={products} />
       </div>
       <Button />
     </div>

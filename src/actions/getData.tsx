@@ -1,13 +1,11 @@
 "use server";
 
-import ProductCart from "@/components/ProductCart";
 import { prisma } from "@/utils/connect";
 import { headers } from "next/headers";
 
-// fetchProduct fonksiyonu
+// fetchProduct fonksiyonu - sadece veri döndür, rendering client-side
 export const fetchProduct = async (page: number, cat?: string) => {
     headers();
-
 
     const limit = 8;
     if (!cat) {
@@ -17,10 +15,7 @@ export const fetchProduct = async (page: number, cat?: string) => {
                 skip: (page - 1) * limit,
             });
 
-            return result.map((item: any) => (
-                <ProductCart key={item.id} products={item} />
-            ));
-
+            return result;
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -34,15 +29,10 @@ export const fetchProduct = async (page: number, cat?: string) => {
             const result = await prisma.products.findMany({
                 where: {
                     categoryId: cat,
-                    // Büyük/küçük harf duyarlılığını dikkate almadan arama yapar
-
                 }
-
             });
 
-            return result.map((item: any) => (
-                <ProductCart key={item.id} products={item} />
-            ));
+            return result;
 
         } catch (error) {
             console.error("Error fetching data:", error);

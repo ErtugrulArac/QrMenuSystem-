@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# JSON data files (now using MongoDB)
+orders.json
+tables.json
+waiter-calls.json
+daily-sales.json
+campaigns.json

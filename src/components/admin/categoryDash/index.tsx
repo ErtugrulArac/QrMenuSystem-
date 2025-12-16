@@ -185,35 +185,41 @@ const Index =  () => {
 
 
   return (
-    <div className='mt-10'>
-      <div className='mb-11'>
-        <h4 className='font-semibold ml-2 underline mt-3'>Yeni Kategori Ekle</h4>
+    <div className='mt-6 md:mt-10'>
+      <div className='mb-8 md:mb-11'>
+        <h4 className='font-semibold ml-2 underline mt-3 text-sm md:text-base'>Yeni Kategori Ekle</h4>
         <form onSubmit={
           (e) => {
             addCategory(e);
           }
-        } className='flex flex-col gap-4 items-center justify-around w-[90%] m-auto mt-4'>
-          <input className='border border-black rounded-sm px-3 py-1' type="text" placeholder='Kategori İsmi..' />
+        } className='flex flex-col gap-3 md:gap-4 items-center justify-around w-full md:w-[90%] m-auto mt-4 px-4 md:px-0'>
+          <input className='border border-black rounded-sm px-3 py-2 w-full text-sm md:text-base' type="text" placeholder='Kategori İsmi..' />
           <input
             type="file"
             id='image'
             onChange={handleFileChange}
+            className='w-full text-sm md:text-base'
           />
 
-          <button className='border border-black text-white rounded bg-black px-3 py-1' type='submit'>Kategori Ekle</button>
+          <button className='border border-black text-white rounded bg-black px-4 py-2 w-full md:w-auto text-sm md:text-base hover:bg-gray-800 transition-colors' type='submit'>Kategori Ekle</button>
         </form>
       </div>
-      <h4 className='font-semibold ml-2 underline'>Kategori Düzenlemesi</h4>
-      <div className='flex flex-col'>
+      <h4 className='font-semibold ml-2 underline text-sm md:text-base px-4 md:px-0'>Kategori Düzenlemesi</h4>
+      <div className='flex flex-col px-4 md:px-0'>
         {
           data.map((category: oneCategoryType) => (
-            <div key={category.name} className='flex flex-row justify-between items-center border-b border-gray-300 py-2 w-[90%] m-auto'>
-              <p className='ml-2 font-semibold'>{category.name}</p>
-              <div className='flex flex-row '>
-                <button onClick={async () => {
-                  setProp(category.name);
-                  setImageName(category.image);
-                }}><Button image={imageName} mainNamee={prop} /></button>
+            <div key={category.name} className='flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-300 py-3 md:py-2 w-full md:w-[90%] m-auto gap-2 sm:gap-0'>
+              <p className='ml-0 md:ml-2 font-semibold text-sm md:text-base break-words flex-1 min-w-0'>{category.name}</p>
+              <div className='flex flex-row gap-2 w-full sm:w-auto'>
+                <button 
+                  onClick={async () => {
+                    setProp(category.name);
+                    setImageName(category.image);
+                  }}
+                  className='flex-1 sm:flex-initial'
+                >
+                  <Button image={imageName} mainNamee={prop} />
+                </button>
 
                 <button onClick={() => {
                   const userConfirmed = window.confirm("Onaylıyor musunuz?");
@@ -222,7 +228,7 @@ const Index =  () => {
                   } else {
                     null;
                   }
-                }} className='bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded'>Sil</button>
+                }} className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 md:px-4 rounded text-sm md:text-base transition-colors flex-1 sm:flex-initial'>Sil</button>
               </div>
             </div>
           ))

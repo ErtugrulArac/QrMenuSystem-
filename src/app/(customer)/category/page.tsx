@@ -1,9 +1,11 @@
 import MenuItems from '@/components/MenuItems'
 import LoadMore from '@/components/LoadMore'
 import ProductCart from '@/components/ProductCart'
+import CampaignBanner from '@/components/CampaignBanner'
 import { url } from '@/lib/url'
 import { productType } from '@/types'
 import Button from "@/components/button";
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 
 const getData = async (page: number) => {
     try {
@@ -24,24 +26,22 @@ const getData = async (page: number) => {
     }
 }
 
-const page = async () => {
-
-    const products: productType = await getData(1)
-    
+export default async function CategoryPage() {
+    const data = await getData(1)
+    const products = Array.isArray(data) ? data : data?.data || [];
 
     return (
         <div>
             <MenuItems />
-            <div className='mt-10 '>
+            <CampaignBanner />
+            <div className='mt-10'>
                 {products.map((item: any) => (
                     <ProductCart key={item.id} products={item} />
-                )) }
+                ))}
                 <LoadMore />
                 <Button />
-
             </div>
+            <ScrollToTopButton />
         </div>
     )
 }
-
-export default page

@@ -1,13 +1,11 @@
 import React, { ReactNode } from 'react';
-import DashNav from "@/app/(admin)/_components/dashNav";
 import QueryProvider from '@/provider/queryProvider'
 
 const Layout = ({ children }: { children: ReactNode }) => {
     return (
-        <div>
+        <div className='w-full'>
             <QueryProvider>
-                <DashNav />
-                <main>{children}</main>
+                <main className='w-full'>{children}</main>
             </QueryProvider>
         </div>
     );

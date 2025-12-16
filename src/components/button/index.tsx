@@ -25,7 +25,7 @@ export default function DrawerDemo() {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <div className="fixed right-3 bottom-5 bg-black rounded-full p-3"> <GiHamburgerMenu size={30} color="white" /> </div>
+                <div style={{ position: 'fixed', right: '1rem', bottom: '1.25rem', zIndex: 9999 }} className="bg-black rounded-full p-3"> <GiHamburgerMenu size={30} color="white" /> </div>
             </DrawerTrigger>
             <DrawerContent>
                 <div className="mx-auto w-full max-w-sm">
@@ -48,10 +48,12 @@ export default function DrawerDemo() {
                         </div>
                     </div>
                     <DrawerFooter>
-                        <Button><Link target="_blank" href="https://g.page/r/CYKETA_OE1bUEB0/review">Bize Puan ver</Link></Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Kapat</Button>
-                        </DrawerClose>
+                        <div className="flex gap-3 w-full">
+                            <Button className="flex-1"><Link target="_blank" href="https://g.page/r/CYKETA_OE1bUEB0/review">Bize Puan ver</Link></Button>
+                            <DrawerClose asChild>
+                                <Button variant="outline" className="flex-1">Kapat</Button>
+                            </DrawerClose>
+                        </div>
                     </DrawerFooter>
                 </div>
             </DrawerContent>

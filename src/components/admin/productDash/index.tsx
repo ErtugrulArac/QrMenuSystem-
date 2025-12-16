@@ -195,56 +195,60 @@ const Index =  () => {
   };
 
   return (
-    <div>
+    <div className='px-4 md:px-0'>
       <div>
-        <h4 className='font-semibold ml-2 underline mt-3'>Ürün Ekle</h4>
+        <h4 className='font-semibold ml-0 md:ml-2 underline mt-3 text-sm md:text-base'>Ürün Ekle</h4>
         <form onSubmit={
           (e) => {
             handleUpdate(e);
           }
-        } className='flex flex-col gap-4 items-center justify-around w-[90%] m-auto mt-4'>
+        } className='flex flex-col gap-3 md:gap-4 items-center justify-around w-full md:w-[90%] m-auto mt-4'>
           <input onChange={(e) => {
             setProductName(e.target.value)
-          }} className='border border-black rounded-sm px-3 py-1 w-full' type="text" placeholder='Ürün İsmi..' />
+          }} className='border border-black rounded-sm px-3 py-2 w-full text-sm md:text-base' type="text" placeholder='Ürün İsmi..' />
           <input
             type="file"
             id='image'
             onChange={handleFileChange}
+            className='w-full text-sm md:text-base'
           />
           <input onChange={(e) => {
             setProductDescription(e.target.value)
-          }} className='border border-black rounded-sm px-3 py-1 w-full' type="text" placeholder='Ürün açıklaması (opsiyonel)..' />
+          }} className='border border-black rounded-sm px-3 py-2 w-full text-sm md:text-base' type="text" placeholder='Ürün açıklaması (opsiyonel)..' />
           <input onChange={(e) => {
             const price = parseInt(e.target.value)
             setProductPrice(price)
-          }} className='border border-black rounded-sm px-3 py-1 w-full' type="number" placeholder='Fiyat..' />
+          }} className='border border-black rounded-sm px-3 py-2 w-full text-sm md:text-base' type="number" placeholder='Fiyat..' />
           <SelectCategory selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
-          <button type="submit" className='border border-black text-white rounded bg-black px-3 py-3 w-full'>Ürün Ekle</button>
+          <button type="submit" className='border border-black text-white rounded bg-black px-4 py-3 w-full text-sm md:text-base hover:bg-gray-800 transition-colors'>Ürün Ekle</button>
         </form>
       </div>
 
-      <h4 className='font-semibold ml-2 underline mt-7'>Ürün Düzenle</h4>
+      <h4 className='font-semibold ml-0 md:ml-2 underline mt-7 text-sm md:text-base'>Ürün Düzenle</h4>
       {/* Arama kutusu */}
       <input
         type="text"
         placeholder="Ürün Ara"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className='ml-2 mt-2 p-1 border border-gray-300 rounded'
+        className='ml-0 md:ml-2 mt-2 p-2 border border-gray-300 rounded w-full md:w-auto text-sm md:text-base'
       />
 
       {/* Filtrelenmiş veriyi göster */}
       {filteredData.map((item: oneProductType) => (
-        <div key={item.name} className='flex flex-row justify-between items-center border-b border-gray-300 py-2 w-[90%] m-auto'>
-          <p className='ml-2 font-semibold'>{item.name}</p>
-          <div className='flex flex-row '>
-            <button onClick={async () => {
-              setProp(item.name);
-              setImageName(item.image);
-              setDesc(item.description);
-              setPrice(item.price);
-              setId(item.id);
-            }}>
+        <div key={item.name} className='flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-300 py-3 md:py-2 w-full md:w-[90%] m-auto gap-2 sm:gap-0'>
+          <p className='ml-0 md:ml-2 font-semibold text-sm md:text-base break-words flex-1 min-w-0'>{item.name}</p>
+          <div className='flex flex-row gap-2 w-full sm:w-auto'>
+            <button 
+              onClick={async () => {
+                setProp(item.name);
+                setImageName(item.image);
+                setDesc(item.description);
+                setPrice(item.price);
+                setId(item.id);
+              }}
+              className='flex-1 sm:flex-initial'
+            >
               <ButtonProduct image={imageName} mainNamee={prop} price={price} desc={desc} id={id} />
             </button>
             <button onClick={() => {
@@ -254,7 +258,7 @@ const Index =  () => {
               } else {
                 null;
               }
-            }} className='bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded'>Sil</button>
+            }} className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 md:px-4 rounded text-sm md:text-base transition-colors flex-1 sm:flex-initial'>Sil</button>
           </div>
         </div>
       ))}
