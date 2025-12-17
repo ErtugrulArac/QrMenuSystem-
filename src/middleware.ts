@@ -19,37 +19,66 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const pathname = nextUrl.pathname;
   
-  // Check if current route is in publicRoutes array - exact match or starts with /
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || 
+  console.log('🔍 [Middleware] Path:', pathname, '| Logged In:', isLoggedIn);
+
+  const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
+  const isAuthRoute = authRoutes.includes(pathname);
+
+  // Directly protect /dashboard and all admin routes
+  const isAdminRoute = pathname.startsWith('/dashboard') || 
+                       pathname.startsWith('/admin') ||
+                       pathname.startsWith('/(admin)');
+
+  // Check if it's a public route
+  const isPublicRoute = publicRoutes.includes(pathname) || 
     publicRoutes.some(route => {
-      if (route === "/") return false; // "/" handled above
-      // Check if pathname starts with route and next char is "/" or end of string
-      return nextUrl.pathname.startsWith(route + "/") || nextUrl.pathname === route;
+      if (route === "/") return pathname === "/";
+      return pathname.startsWith(route + "/") || pathname === route;
     });
-  
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  // API auth routes - allow all
-  if(isApiAuthRoute) return null;
+  console.log('  API:', isApiAuthRoute, '| Auth:', isAuthRoute, '| Admin:', isAdminRoute, '| Public:', isPublicRoute);
 
-  // If on auth routes (like /auth/login)
-  if(isAuthRoute){
-    // If already logged in, redirect to dashboard
-    if(isLoggedIn){
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    };
+  // 1. Allow API auth routes
+  if(isApiAuthRoute) {
+    console.log('  ✅ API Auth - Allow');
     return null;
   }
 
-  // If NOT logged in AND trying to access non-public routes
-  if (!isLoggedIn && !isPublicRoute) {
+  // 2. Auth routes (login page)
+  if(isAuthRoute){
+    if(isLoggedIn){
+      console.log('  🔄 Logged in, redirect to dashboard');
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    console.log('  ✅ Login page - Allow');
+    return null;
+  }
+
+  // 3. Admin routes - MUST be logged in
+  if(isAdminRoute) {
+    if(!isLoggedIn) {
+      console.log('  🔴 Admin route NOT logged in - Redirect to login');
+      return Response.redirect(new URL("/auth/login", nextUrl));
+    }
+    console.log('  ✅ Admin route logged in - Allow');
+    return null;
+  }
+
+  // 4. Public routes - everyone allowed
+  if(isPublicRoute) {
+    console.log('  ✅ Public route - Allow');
+    return null;
+  }
+
+  // 5. Default: deny if not logged in
+  if(!isLoggedIn) {
+    console.log('  🔴 Protected, not logged in - Redirect to login');
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
-  // If logged in and trying to access public routes, allow it
-  // If NOT logged in and trying to access public routes, allow it
+  console.log('  ✅ Default - Allow');
   return null;
 
 })
