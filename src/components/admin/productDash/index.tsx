@@ -144,16 +144,14 @@ const Index =  () => {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  if (isLoading) return "Loading...";
+  // Fetch all categories for the filter dropdown
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () =>
+      fetch(`${url}/api/categories?limit=1000`).then((res) => res.json()),
+  });
 
-  // Get unique categories from products
-  const categories = Array.from(
-    new Map(
-      allProducts
-        .filter((item: oneProductType) => item.category)
-        .map((item: oneProductType) => [item.category.id, item.category])
-    ).values()
-  );
+  if (isLoading) return "Loading...";
 
   // Filter data by searchTerm and selectedCategory
   const filteredData = allProducts.filter((item: oneProductType) => {
@@ -252,7 +250,7 @@ const Index =  () => {
           className='p-2 border border-gray-300 rounded flex-1 md:flex-none text-sm md:text-base'
         >
           <option value="">Tüm Kategoriler</option>
-          {categories.map((cat: any) => (
+          {allCategories && allCategories.map((cat: any) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
             </option>
