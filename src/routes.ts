@@ -1,9 +1,15 @@
 /**
  * Herkese açık routelar
  * Bunlar login gerektirmez
- * @type {string}
+ * @type {string[]}
  */
-export const publicRoutes = "/(customer)";
+export const publicRoutes = [
+  "/",
+  "/category",
+  "/cart",
+  "/table-selection",
+  "/auth/login"
+];
  
   
 

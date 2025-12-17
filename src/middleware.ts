@@ -20,7 +20,13 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = nextUrl.pathname.startsWith(publicRoutes);
+  
+  // Check if current route is in publicRoutes array
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === "/") return nextUrl.pathname === "/";
+    return nextUrl.pathname.startsWith(route);
+  });
+  
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   // API auth routes - allow all
@@ -35,8 +41,8 @@ export default auth((req) => {
     return null;
   }
 
-  // If NOT logged in AND trying to access admin/protected routes
-  if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+  // If NOT logged in AND trying to access non-public routes
+  if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
