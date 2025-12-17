@@ -20,22 +20,43 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    // Her zaman yeni sipariş oluştur (pending olarak)
-    const newOrder = await createOrder({
-      ...data,
-      status: 'pending'
-    });
+    console.log('📦 Incoming order data:', JSON.stringify(data, null, 2));
     
-    // Masayı kapat
-    const tables = await loadTables();
-    const table = tables.find((t: any) => t.code === newOrder.tableCode);
-    
-    if (table && table.status === 'open') {
-      await updateTable(table.id, { status: 'closed' });
-      console.log(`🔴 Table ${newOrder.tableCode} closed`);
+    // Validate required fields
+    if (!data.tableCode || !data.items || !Array.isArray(data.items)) {
+      console.error('❌ Missing required fields:', { tableCode: data.tableCode, items: data.items });
+      return NextResponse.json(
+        { error: 'tableCode ve items alanları gereklidir' },
+        { status: 400 }
+      );
     }
     
+    // Her zaman yeni sipariş oluştur (pending olarak)
+    const newOrder = await createOrder({
+      tableCode: data.tableCode,
+      items: data.items,
+      subtotal: data.subtotal,
+      tax: data.tax,
+      total: data.total,
+      status: 'pending',
+      customerNote: data.customerNote || null
+    });
+    
     console.log('✅ New order created:', newOrder.id, 'Table:', newOrder.tableCode);
+    
+    // Masayı kapat
+    try {
+      const tables = await loadTables();
+      const table = tables.find((t: any) => t.code === newOrder.tableCode);
+      
+      if (table && table.status === 'open') {
+        await updateTable(table.id, { status: 'closed' });
+        console.log(`🔴 Table ${newOrder.tableCode} closed`);
+      }
+    } catch (tableError) {
+      console.warn('⚠️ Could not update table status:', tableError);
+      // Don't fail the order if table update fails
+    }
     
     return NextResponse.json({ 
       ...newOrder, 
@@ -43,8 +64,9 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
   } catch (error) {
     console.error('❌ Error creating order:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create order';
     return NextResponse.json(
-      { error: 'Failed to create order' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

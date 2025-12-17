@@ -48,16 +48,17 @@ model Table {
 }
 
 model Order {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  tableCode   String
-  items       Json     // Array of items with structure: {id, name, quantity, price, subtotal, cancelled?}
-  subtotal    Float
-  tax         Float
-  total       Float
-  status      String   @default("pending") // "pending", "confirmed", "paid", "rejected"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  paidAt      DateTime?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  tableCode     String
+  items         Json     // Array of items with structure: {id, name, quantity, price, subtotal, cancelled?}
+  subtotal      Float
+  tax           Float
+  total         Float
+  status        String   @default("pending") // "pending", "confirmed", "paid", "rejected"
+  customerNote  String?  // Customer notes/special requests
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   
   @@index([tableCode])
   @@index([status])
