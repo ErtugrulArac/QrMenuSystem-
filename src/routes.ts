@@ -8,7 +8,10 @@ export const publicRoutes = [
   "/category",
   "/cart",
   "/table-selection",
-  "/auth/login"
+  "/auth/login",
+  "/api/waiter-calls",
+  "/api/getProducts",
+  "/api/categories"
 ];
  
   
