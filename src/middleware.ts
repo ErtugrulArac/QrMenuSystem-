@@ -21,11 +21,13 @@ export default auth((req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   
-  // Check if current route is in publicRoutes array
-  const isPublicRoute = publicRoutes.some(route => {
-    if (route === "/") return nextUrl.pathname === "/";
-    return nextUrl.pathname.startsWith(route);
-  });
+  // Check if current route is in publicRoutes array - exact match or starts with /
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || 
+    publicRoutes.some(route => {
+      if (route === "/") return false; // "/" handled above
+      // Check if pathname starts with route and next char is "/" or end of string
+      return nextUrl.pathname.startsWith(route + "/") || nextUrl.pathname === route;
+    });
   
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
