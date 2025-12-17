@@ -9,11 +9,15 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     
     // Giriş yapmamışsa login'e yönlendir
     if (!session) {
-        console.log('🔴 [Dashboard Layout] No session - Redirecting to login');
+        if (process.env.NODE_ENV === 'development') {
+            console.log('🔴 [Dashboard Layout] No session - Redirecting to login');
+        }
         redirect('/auth/login');
     }
     
-    console.log('✅ [Dashboard Layout] Session valid - User:', session.user?.email);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('✅ [Dashboard Layout] Session valid - User:', session.user?.email);
+    }
     
     return (
         <div className='w-full'>

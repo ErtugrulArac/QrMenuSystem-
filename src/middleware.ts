@@ -21,7 +21,9 @@ export default auth((req) => {
 
   const pathname = nextUrl.pathname;
   
-  console.log('🔍 [Middleware] Path:', pathname, '| Logged In:', isLoggedIn);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 [Middleware] Path:', pathname, '| Logged In:', isLoggedIn);
+  }
 
   const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(pathname);
@@ -38,47 +40,49 @@ export default auth((req) => {
       return pathname.startsWith(route + "/") || pathname === route;
     });
 
-  console.log('  API:', isApiAuthRoute, '| Auth:', isAuthRoute, '| Admin:', isAdminRoute, '| Public:', isPublicRoute);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('  API:', isApiAuthRoute, '| Auth:', isAuthRoute, '| Admin:', isAdminRoute, '| Public:', isPublicRoute);
+  }
 
   // 1. Allow API auth routes
   if(isApiAuthRoute) {
-    console.log('  ✅ API Auth - Allow');
+    if (process.env.NODE_ENV === 'development') console.log('  ✅ API Auth - Allow');
     return null;
   }
 
   // 2. Auth routes (login page)
   if(isAuthRoute){
     if(isLoggedIn){
-      console.log('  🔄 Logged in, redirect to dashboard');
+      if (process.env.NODE_ENV === 'development') console.log('  🔄 Logged in, redirect to dashboard');
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    console.log('  ✅ Login page - Allow');
+    if (process.env.NODE_ENV === 'development') console.log('  ✅ Login page - Allow');
     return null;
   }
 
   // 3. Admin routes - MUST be logged in
   if(isAdminRoute) {
     if(!isLoggedIn) {
-      console.log('  🔴 Admin route NOT logged in - Redirect to login');
+      if (process.env.NODE_ENV === 'development') console.log('  🔴 Admin route NOT logged in - Redirect to login');
       return Response.redirect(new URL("/auth/login", nextUrl));
     }
-    console.log('  ✅ Admin route logged in - Allow');
+    if (process.env.NODE_ENV === 'development') console.log('  ✅ Admin route logged in - Allow');
     return null;
   }
 
   // 4. Public routes - everyone allowed
   if(isPublicRoute) {
-    console.log('  ✅ Public route - Allow');
+    if (process.env.NODE_ENV === 'development') console.log('  ✅ Public route - Allow');
     return null;
   }
 
   // 5. Default: deny if not logged in
   if(!isLoggedIn) {
-    console.log('  🔴 Protected, not logged in - Redirect to login');
+    if (process.env.NODE_ENV === 'development') console.log('  🔴 Protected, not logged in - Redirect to login');
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
-  console.log('  ✅ Default - Allow');
+  if (process.env.NODE_ENV === 'development') console.log('  ✅ Default - Allow');
   return null;
 
 })
