@@ -1,7 +1,17 @@
 import { prisma } from '@/utils/connect';
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Admin only - require authentication
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Admin access required' },
+      { status: 401 }
+    );
+  }
+
   try {
     const products = await prisma.products.findMany({
       include: {
@@ -19,6 +29,15 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  // Admin only - require authentication
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Admin access required' },
+      { status: 401 }
+    );
+  }
+
   try {
     const data = await request.json();
     const { name, ename, categoryId, image, price, description, edescription } =

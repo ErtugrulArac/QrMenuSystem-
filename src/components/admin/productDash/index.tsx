@@ -19,7 +19,7 @@ const Index =  () => {
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState(0);
-
+  const [selectedCategory, setSelectedCategory] = useState<string>(''); // Category filter state
 
   const [prop, setProp] = useState("");
   const [imageName, setImageName] = useState("");
@@ -146,9 +146,20 @@ const Index =  () => {
 
   if (isLoading) return "Loading...";
 
-  // data dizisini searchTerm'e göre filtrele
+  // Get unique categories from products
+  const categories = Array.from(
+    new Map(
+      allProducts
+        .filter((item: oneProductType) => item.category)
+        .map((item: oneProductType) => [item.category.id, item.category])
+    ).values()
+  );
+
+  // Filter data by searchTerm and selectedCategory
   const filteredData = allProducts.filter((item: oneProductType) => {
-    return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = !selectedCategory || item.categoryId === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
 
   const compressImage = async (file: File) => {
@@ -225,14 +236,29 @@ const Index =  () => {
       </div>
 
       <h4 className='font-semibold ml-0 md:ml-2 underline mt-7 text-sm md:text-base'>Ürün Düzenle</h4>
-      {/* Arama kutusu */}
-      <input
-        type="text"
-        placeholder="Ürün Ara"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className='ml-0 md:ml-2 mt-2 p-2 border border-gray-300 rounded w-full md:w-auto text-sm md:text-base'
-      />
+      
+      {/* Search ve Category Filter */}
+      <div className='ml-0 md:ml-2 mt-4 flex flex-col md:flex-row gap-3 w-full md:w-auto'>
+        <input
+          type="text"
+          placeholder="Ürün Ara"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className='p-2 border border-gray-300 rounded flex-1 md:flex-none text-sm md:text-base'
+        />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className='p-2 border border-gray-300 rounded flex-1 md:flex-none text-sm md:text-base'
+        >
+          <option value="">Tüm Kategoriler</option>
+          {categories.map((cat: any) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Filtrelenmiş veriyi göster */}
       {filteredData.map((item: oneProductType) => (
