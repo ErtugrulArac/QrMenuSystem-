@@ -18,8 +18,19 @@ export const {
     error: "/auth/error",
   },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+      }
+      return session
+    },
     async signIn({ user }) {
-
       return true;
     },
   },
@@ -33,6 +44,7 @@ export const {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
+        maxAge: 30 * 24 * 60 * 60, // 30 days
       }
     }
   },
