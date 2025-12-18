@@ -1,8 +1,8 @@
 "use client";
 
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'next/navigation';
-import { useTransition, useState, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useTransition, useState, Suspense, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
@@ -25,6 +25,7 @@ import { login } from '@/actions/login';
 
 const LoginForm = () => {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const callbackUrl = searchParams.get("callbackUrl");
     const urlError = searchParams.get("error") === "OAtuhAccountNotLinked" ? "Bu mail adresiyle girili başka bir hesap var." : "";
     const email = searchParams.get("email") || "";
@@ -40,6 +41,16 @@ const LoginForm = () => {
             password: '',
         },
     })
+
+    // Redirect when success
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                router.push("/dashboard");
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [success, router]);
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError("");
