@@ -17,10 +17,6 @@ export const {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-    maxAge: 30 * 24 * 60 * 60,
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
